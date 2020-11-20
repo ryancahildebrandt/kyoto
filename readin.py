@@ -19,7 +19,7 @@ restaurants = pd.read_csv("./data/Kyoto_Restaurant_Info.csv")
 
 #%% Global Map JPN 
 
-dat=gpd.read_file("./data/kansai-latest-free.shp/gis_osm_buildings_a_free_1.shx")
+dat=gpd.read_file("./data/kansai-latest-free.shp/gis_osm_places_a_free_1.shx")
 dat.plot()
 plt.show()
 
