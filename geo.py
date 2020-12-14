@@ -13,9 +13,10 @@ import geoplot as gplt
 import json
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 
 from readin import restaurants, stations
-from voronoi import vorGeoJSON
+from voronoi import all_points, all_points_hull, boundary_points, boundary_polygon, vorGeoJSON
 
 # %%
 
@@ -53,6 +54,10 @@ folium.Choropleth(
 #	line_color="#008800",
 	highlight=True,
 	legend_name = "Station Regions"
+	).add_to(m)
+
+folium.GeoJson(
+	boundary_polygon
 	).add_to(m)
 
 

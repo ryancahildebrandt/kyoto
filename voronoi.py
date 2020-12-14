@@ -17,7 +17,7 @@ import shapely
 
 from matplotlib.patches import CirclePolygon
 from readin import max_lat, max_lon, min_lat, min_lon, restaurants, stations
-from scipy.spatial import Voronoi, voronoi_plot_2d
+from scipy.spatial import ConvexHull, Voronoi, convex_hull_plot_2d, voronoi_plot_2d
 from shapely.geometry import LineString, MultiPoint, MultiPolygon, Point, Polygon
 from shapely.ops import cascaded_union
 from shapely.ops import polygonize, unary_union
@@ -25,8 +25,8 @@ from shapely.ops import polygonize, unary_union
 
 
 # %% Voronoi
-stations_points = zip(stations['long'], stations['lat'])
-stations_vor = Voronoi(list(zip(stations['long'], stations['lat'])))
+stations_points = list(zip(stations['long'], stations['lat']))
+stations_vor = Voronoi(stations_points)
 
 def makeGeoPolygon(vertices, region):
     if -1 in region or region == []:
@@ -46,4 +46,15 @@ vorGeoJSON = {
 
 
 # %% Boundary
+
+
+
+
+restaurants_points = list([(i,j) for i, j in zip(list(restaurants.Long), list(restaurants.Lat))])
+all_points = restaurants_points+stations_points
+all_points_hull = ConvexHull(all_points)
+boundary_points= all_points_hull.points
+
+
+
 
