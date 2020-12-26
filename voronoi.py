@@ -8,24 +8,23 @@ Created on Sun Dec 6 11:18:51 2020
 
 # %% Doc setup
 import geopandas as gpd
-import math
-import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import shapely
 
-from matplotlib.patches import CirclePolygon
 from readin import max_lat, max_lon, min_lat, min_lon, restaurants, stations
-from scipy.spatial import ConvexHull, Voronoi, convex_hull_plot_2d, voronoi_plot_2d
-from shapely.geometry import LineString, MultiPoint, MultiPolygon, Point, Polygon
-from shapely.ops import cascaded_union
-from shapely.ops import polygonize, unary_union
-
-
+from scipy.spatial import Voronoi
+from shapely.geometry import LineString, MultiPoint, MultiPolygon, Point
+from shapely.ops import polygonize
 
 # %% Voronoi
-stations_points = list(zip(stations['long'], stations['lat']))
+four_corners = [
+(max_lon, max_lat),
+(max_lon, min_lat),
+(min_lon, max_lat),
+(min_lon, min_lat),
+(135.66, max_lat) #an extra point, dirty fix for voronoi
+]
+
+stations_points = list(zip(stations['long'], stations['lat']))+four_corners
 stations_vor = Voronoi(stations_points)
 
 def makeGeoPolygon(vertices, region):
@@ -44,17 +43,16 @@ vorGeoJSON = {
 }
 
 
-
-# %% Boundary
-
-
-
-
+# %% Boundary 
+# from https://stackoverflow.com/questions/34968838/python-finite-boundary-voronoi-cells
 restaurants_points = list([(i,j) for i, j in zip(list(restaurants.Long), list(restaurants.Lat))])
 all_points = restaurants_points+stations_points
-all_points_hull = ConvexHull(all_points)
-boundary_points= all_points_hull.points
 
+points = np.array(all_points)
+lines = [LineString(stations_vor.vertices[line]) for line in stations_vor.ridge_vertices if -1 not in line]
+pts = MultiPoint([Point(i) for i in all_points])
+mask = pts.convex_hull.union(pts.buffer(.01, resolution=10, cap_style=1))
+result = MultiPolygon([poly.intersection(mask) for poly in polygonize(lines)])
 
-
+vor_gdf = gpd.GeoDataFrame(geometry=[i for i in result]).to_json()
 
