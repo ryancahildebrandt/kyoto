@@ -6,19 +6,23 @@ Created on Mon Dec 14 21:00:43 2020
 @author: ryan
 """
 
-# %% Doc setup
+# Doc setup
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import sidetable as stb 
 
-from readin import restaurants, stations
-from shapely.geometry import MultiPoint, Point, mapping
+from readin import restaurants
+from readin import stations
+from shapely.geometry import MultiPoint
+from shapely.geometry import Point
+from shapely.geometry import mapping
 from shapely.ops import nearest_points
-from voronoi import restaurants_points, stations_points
+from voronoi import restaurants_points
+from voronoi import stations_points
 
-# %% Calculate Nearest Station
+# Calculate Nearest Station
 
 def get_nearest_station(poi=Point(restaurants_points[0])):
 	stations_mp=MultiPoint(stations_points)
@@ -29,7 +33,7 @@ def get_nearest_station(poi=Point(restaurants_points[0])):
 
 restaurants["Nearest"]=[get_nearest_station(Point(restaurants_points[i])) for i in range(len(restaurants.Name))]
 
-# %% Split and Export Stbs
+# Split and Export Stbs
 
 for station in restaurants.Nearest.unique():
 	name=station.replace(" ", "_")
@@ -52,7 +56,7 @@ for station in restaurants.Nearest.unique():
 
 station_groupby_df=restaurants[["Station","TotalScore"]].groupby("Station").describe()
 
-# %% Izakaya 
+# Izakaya 
 
 izakaya_df = restaurants[restaurants.FirstCatSimp=="Izakaya"]
 izakaya_df.to_csv('./data/izakaya_df.csv')

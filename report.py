@@ -6,14 +6,21 @@ Created on Fri Dec 25 21:02:09 2020
 @author: ryan
 """
 
-# %% Doc setup
+# Doc setup
 import datapane as dp
 import sidetable as stb
 
 from geo import m
-from profiles import Arashiyama_df, Chayama_df, Demachiyanagi_df, Hanazono_df, Kokusaikaikan_df, izakaya_df, restaurants, station_groupby_df
+from profiles import Arashiyama_df
+from profiles import Chayama_df
+from profiles import Demachiyanagi_df
+from profiles import Hanazono_df
+from profiles import Kokusaikaikan_df
+from profiles import izakaya_df
+from profiles import restaurants
+from profiles import station_groupby_df
 
-# %% Report
+# Report
 
 rprt = dp.Report(
 	dp.Text("""

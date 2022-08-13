@@ -6,16 +6,24 @@ Created on Sun Dec 6 11:18:51 2020
 @author: ryan
 """
 
-# %% Doc setup
+# Doc setup
 import geopandas as gpd
 import numpy as np
 
-from readin import max_lat, max_lon, min_lat, min_lon, restaurants, stations
+from readin import max_lat
+from readin import max_lon
+from readin import min_lat
+from readin import min_lon
+from readin import restaurants
+from readin import stations
 from scipy.spatial import Voronoi
-from shapely.geometry import LineString, MultiPoint, MultiPolygon, Point
+from shapely.geometry import LineString
+from shapely.geometry import MultiPoint
+from shapely.geometry import MultiPolygon
+from shapely.geometry import Point
 from shapely.ops import polygonize
 
-# %% Voronoi
+# Voronoi
 four_corners = [
 (max_lon, max_lat),
 (max_lon, min_lat),
@@ -43,7 +51,7 @@ vorGeoJSON = {
 }
 
 
-# %% Boundary 
+# Boundary 
 # from https://stackoverflow.com/questions/34968838/python-finite-boundary-voronoi-cells
 restaurants_points = list([(i,j) for i, j in zip(list(restaurants.Long), list(restaurants.Lat))])
 all_points = restaurants_points+stations_points

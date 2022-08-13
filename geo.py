@@ -6,19 +6,20 @@ Created on Fri Nov 20 10:53:20 2020
 @author: ryan
 """
 
-# %% Doc setup
+# Doc setup
 import folium
 
-from readin import restaurants, stations
+from readin import restaurants
+from readin import stations
 from voronoi import vor_gdf
 
-# %% Base
+# Base
 m = folium.Map(
 	location=[34.9858, 135.7588],
 	zoom_start=12,
 	tiles="Stamen Toner")
 
-# %% Restaurants
+# Restaurants
 for p in range(0,len(restaurants)):
 	folium.Marker(
 		[restaurants['Lat'].iloc[p],
@@ -31,7 +32,7 @@ for p in range(0,len(restaurants)):
 		icon = folium.Icon(icon='cutlery',color='lightgray', prefix='fa')
 		).add_to(m)
 
-# %% Stations
+# Stations
 for s in range(0,len(stations)):
 	folium.Marker(
 		[stations['lat'].iloc[s],
@@ -42,7 +43,7 @@ for s in range(0,len(stations)):
 		icon = folium.Icon(icon='subway',color='black', prefix='fa')
 		).add_to(m)
 
-# %% Voronoi
+# Voronoi
 folium.Choropleth(
 	geo_data=vor_gdf,
 	fill_color='#ff8c8c',
@@ -53,7 +54,7 @@ folium.Choropleth(
 	legend_name = "Station Regions"
 	).add_to(m)
 
-# %% Export
+# Export
 folium.LayerControl().add_to(m)
 m.save("testmap.html")
 
